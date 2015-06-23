@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>UML Generator</title>
+
+    <link rel="stylesheet" type="text/css" href="assets/css/bootswatch.css">
+    <link rel="stylesheet" type="text/css" href="assets/css/app.css">
+</head>
+<body>
+
+    <header class="header">
+        <nav class="navbar navbar-inverse navbar-fixed-top">
+
+            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-2">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+
+            <div class="collapse navbar-collapse">
+              <a class="navbar-brand navbar-left" href="#">UML Generator</a>
+              <ul class="nav navbar-nav">
+                  <li class="active"><a href="#">Home</a></li>
+                  <li><a href="#">New Project</a></li>
+                  <li><a href="#">Open Project</a></li>
+              </ul>
+            </div>
+
+          </div>
+        </nav>
+    </header>
+
+    <section class="main-content" id="main-content">
+
+        <header class="main-content--title">
+            <h1>{{ workflow.name }}</h1>
+        </header>
+
+        <div class="main-content--workflow" style="width: {{ workflow.width }}px; height: {{ workflow.height }}px">
+            <div v-repeat="classes" class="class draggable" data-x="{{ coord.x }}" data-y="{{ coord.y }}" style="transform: translate({{ coord.x }}px, {{ coord.y }}px); -webkit-transform: translate({{ coord.x }}px, {{ coord.y }}px);">
+                <h2 class="class--name">{{ name }}</h2>
+                <ul class="class--attributes">
+                    <li class="class--attribute" v-repeat="attributes">{{ name }}</li>
+                </ul>
+            </div>
+
+        </div>
+
+
+        
+    </section>
+
+    <footer class="footer">
+        
+    </footer>
+
+    <script type="text/javascript" src="assets/js/jquery-1.11.3.min.js"></script>
+    <script type="text/javascript" src="assets/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="assets/js/bootswatch.js"></script>
+    <script type="text/javascript" src="assets/js/interact.min.js"></script>
+    
+    <script type="text/javascript" src="assets/js/vue.min.js"></script>
+    <script type="text/javascript" src="assets/js/vue-resource.min.js"></script>
+
+    <script type="text/javascript" src="assets/js/app.js"></script>
+
+    <script type="text/javascript">
+
+        // target elements with the "draggable" class
+        interact('.draggable')
+          .draggable({
+            // enable inertial throwing
+            inertia: true,
+            // keep the element within the area of it's parent
+            restrict: {
+              restriction: "parent",
+              endOnly: true,
+              elementRect: { top: 0, left: 0, bottom: 1, right: 1 }
+            },
+
+            // call this function on every dragmove event
+            onmove: dragMoveListener,
+          });
+
+          // Resizable workflow
+          interact('.main-content--workflow').resizable({
+            edges: { left: false, right: true, bottom: true, top: false }
+          }).on('resizemove', function (event) {
+            var target = event.target,
+                x = (parseFloat(target.getAttribute('data-x')) || 0),
+                y = (parseFloat(target.getAttribute('data-y')) || 0);
+
+            // update the element's style
+            target.style.width  = event.rect.width + 'px';
+            target.style.height = event.rect.height + 'px';
+        });
+
+          function dragMoveListener (event) {
+            var target = event.target,
+                // keep the dragged position in the data-x/data-y attributes
+                x = (parseFloat(target.getAttribute('data-x')) || 0) + event.dx,
+                y = (parseFloat(target.getAttribute('data-y')) || 0) + event.dy;
+
+            // translate the element
+            target.style.webkitTransform =
+            target.style.transform =
+              'translate(' + x + 'px, ' + y + 'px)';
+
+            // update the posiion attributes
+            target.setAttribute('data-x', x);
+            target.setAttribute('data-y', y);
+          }
+
+          // this is used later in the resizing demo
+          window.dragMoveListener = dragMoveListener;
+
+    </script>
+
+</body>
+</html>
