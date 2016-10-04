@@ -1,6 +1,0 @@
-[submodule "uml_generator_api"]
-	path = uml_generator_api
-	url = https://github.com/adrienredon/uml_generator_api
-[submodule "uml_generator_web"]
-	path = uml_generator_web
-	url = https://github.com/adrienredon/uml_generator_web
